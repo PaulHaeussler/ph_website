@@ -18,7 +18,6 @@ from werkzeug.utils import redirect
 
 from db import MySQLPool
 
-stage = os.environ["STAGE"]
 
 log = logging.getLogger('werkzeug')
 log.setLevel(logging.ERROR)
