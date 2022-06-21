@@ -51,11 +51,16 @@ class Website:
 
     def __log(self, req):
         ip = ""
+        uri = ""
         if request.environ.get('HTTP_X_FORWARDED_FOR') is None:
             ip = (request.environ['REMOTE_ADDR'])
         else:
             ip = (request.environ['HTTP_X_FORWARDED_FOR'])  # if behind a proxy
-        logger.info(ip + " " + req.environ.get('REQUEST_URI'))
+        if req.environ.get('REQUEST_URI') is None:
+            uri = "/"
+        else:
+            uri = req.environ.get('REQUEST_URI')
+        logger.info(ip + " " + uri)
         self.db.execute("INSERT INTO hits(ip, timestamp, url, sec_ch_ua, sec_ch_ua_mobile, sec_ch_ua_platform, "
                         "user_agent, accept_language, path, query) VALUES(%s, %s, %s, %s, %s, %s, %s, %s, %s, %s);",
                         (ip, int(time.time()), req.environ.get('REQUEST_URI'), req.environ.get('HTTP_SEC_CH_UA'),
