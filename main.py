@@ -19,6 +19,7 @@ from werkzeug.utils import redirect
 from db import MySQLPool
 
 
+
 log = logging.getLogger('werkzeug')
 log.setLevel(logging.ERROR)
 logger.add("latest.log")
@@ -33,45 +34,50 @@ def read_args():
     args = vars(parser.parse_args())
     return args
 
+class Website:
 
+    @logger.catch
+    def __init__(self, dbuser=None, dbpw=None, dbhost=None, dbschema=None):
+        logger.info("Starting up...")
 
-logger.info("Starting up...")
-
-
-args = read_args()
-db = MySQLPool(host=args['dbhost'], user=args['dbuser'], password=args['dbpw'], database=args['dbschema'],
-               pool_size=15)
-
-
-
-
-def log(self, req):
-    ip = ""
-    if request.environ.get('HTTP_X_FORWARDED_FOR') is None:
-        ip = (request.environ['REMOTE_ADDR'])
-    else:
-        ip = (request.environ['HTTP_X_FORWARDED_FOR'])  # if behind a proxy
-    logger.info(ip + " " + req.environ.get('REQUEST_URI'))
-    db.execute("INSERT INTO hits(ip, timestamp, url, sec_ch_ua, sec_ch_ua_mobile, sec_ch_ua_platform, "
-                    "user_agent, accept_language, path, query) VALUES(%s, %s, %s, %s, %s, %s, %s, %s, %s, %s);",
-                    (ip, int(time.time()), req.environ.get('REQUEST_URI'), req.environ.get('HTTP_SEC_CH_UA'),
-                     req.environ.get('HTTP_SEC_CH_UA_MOBILE'), req.environ.get('HTTP_SEC_CH_UA_PLATFORM'),
-                     req.environ.get('HTTP_USER_AGENT'), req.environ.get('HTTP_ACCEPT_LANGUAGE'),
-                     req.environ.get('PATH_INFO'), req.environ.get('QUERY_STRING')), commit=True)
+        if dbuser is None:
+            args = read_args()
+            self.db = MySQLPool(host=args['dbhost'], user=args['dbuser'], password=args['dbpw'], database=args['dbschema'],
+                           pool_size=15)
+        else:
+            self.db = MySQLPool(host=dbhost, user=dbuser, password=dbpw, database=dbschema, pool_size=15)
 
 
 
+    def __log(self, req):
+        ip = ""
+        if request.environ.get('HTTP_X_FORWARDED_FOR') is None:
+            ip = (request.environ['REMOTE_ADDR'])
+        else:
+            ip = (request.environ['HTTP_X_FORWARDED_FOR'])  # if behind a proxy
+        logger.info(ip + " " + req.environ.get('REQUEST_URI'))
+        self.db.execute("INSERT INTO hits(ip, timestamp, url, sec_ch_ua, sec_ch_ua_mobile, sec_ch_ua_platform, "
+                        "user_agent, accept_language, path, query) VALUES(%s, %s, %s, %s, %s, %s, %s, %s, %s, %s);",
+                        (ip, int(time.time()), req.environ.get('REQUEST_URI'), req.environ.get('HTTP_SEC_CH_UA'),
+                         req.environ.get('HTTP_SEC_CH_UA_MOBILE'), req.environ.get('HTTP_SEC_CH_UA_PLATFORM'),
+                         req.environ.get('HTTP_USER_AGENT'), req.environ.get('HTTP_ACCEPT_LANGUAGE'),
+                         req.environ.get('PATH_INFO'), req.environ.get('QUERY_STRING')), commit=True)
 
-app = Flask(__name__)
+
+    @logger.catch
+    def create_app(self):
+
+        self.app = Flask(__name__)
 
 
-@app.route('/', methods = ['GET', 'POST'])
-def index():
-    log(request)
-    pass
+        @self.app.route('/', methods = ['GET', 'POST'])
+        def index():
+            self.__log(request)
+            pass
 
 
-
+        self.app.run(host='0.0.0.0', port=5000)
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=5000)
+    w = Website()
+    w.create_app()

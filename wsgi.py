@@ -1,4 +1,7 @@
-from main import app
+from main import Website
 
-if __name__ == '__main__':
-    app.run()
+def build(dbuser, dbpw, dbhost, dbschema):
+    w = Website(dbuser, dbpw, dbhost, dbschema)
+    return w.app
+
+
