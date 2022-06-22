@@ -1,0 +1,11 @@
+#container {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+    grid-template-rows: auto;
+    grid-auto-flow: row;
+}
+
+canvas.glcanvas {
+    width: 460px;
+    height: 460px;
+}

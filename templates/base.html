@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    {% block meta %}{% endblock %}
+    <meta content="width=device-width, initial-scale=1" name="viewport" />
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <title>{% block title %}{% endblock %}</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="{{ url_for('static', filename='jquery.cookie-1.4.1.min.js') }}"></script>
+    <script type="application/javascript" src="https://www.khronos.org/registry/webgl/sdk/demos/google/resources/cameracontroller.js"></script>
+    <script type="application/javascript" src="{{ url_for('static', filename='webgl_utils.js') }}"></script>
+    <script src="{{ url_for('static', filename='gl.js') }}" type="module" defer></script>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div id="main_container">
+        {% block content %}{% endblock %}
+    </div>
+</body>
+</html>

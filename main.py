@@ -78,10 +78,11 @@ class Website:
         @self.app.route('/', methods = ['GET', 'POST'])
         def index():
             self.__log(request)
-            pass
+            return render_template('index.html')
 
         if __name__ == '__main__':
             self.app.run(host='0.0.0.0', port=5000)
+
 
 if __name__ == '__main__':
     w = Website()
