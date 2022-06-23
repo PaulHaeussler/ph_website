@@ -1,6 +1,12 @@
 {% extends 'base.html' %}
 {% block title %}Paul Haeussler{% endblock %}
 {% block content %}
+<div id="header">
+    <h3>Paul Häussler</h3>
+    <span>Find my links below</span>
+    <br>
+    <br>
+</div>
 <div id="container">
     <div class="tile" onclick="window.open('https://www.instagram.com/p_haeussler/', '_blank').focus();">
         <canvas id="instagram" class="glcanvas">Instagram</canvas>
@@ -13,6 +19,18 @@
     </div>
     <div class="tile" onclick="window.open('https://steamcommunity.com/id/xXxDarkVikingxXx', '_blank').focus();">
         <canvas id="steam" class="glcanvas">Steam</canvas>
+    </div>
+    <div class="tile" onclick="window.open('mailto:paulhaeussler@mailbox.org', '_blank').focus();">
+        <canvas id="mail" class="glcanvas">E-Mail</canvas>
+    </div>
+    <div class="tile" onclick="window.open('https://discordapp.com/users/282842854395478017', '_blank').focus();">
+        <canvas id="discord" class="glcanvas">Discord</canvas>
+    </div>
+    <div class="tile" onclick="window.open('https://open.spotify.com/user/paulhaeussler', '_blank').focus();">
+        <canvas id="spotify" class="glcanvas">Spotify</canvas>
+    </div>
+    <div class="tile" onclick="window.open('https://www.tiktok.com/@xxdarkvikingxx', '_blank').focus();">
+        <canvas id="tiktok" class="glcanvas">TikTok</canvas>
     </div>
 </div>
 {% endblock %}
